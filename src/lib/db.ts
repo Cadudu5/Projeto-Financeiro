@@ -1,15 +1,16 @@
 import Dexie from 'dexie';
-import { Transaction } from '../types/transactions';
+import { Purchase } from '../types/transactions';
 
 class FinanceDB extends Dexie {
-  transactions!: Dexie.Table<Transaction, number>;
+  purchases!: Dexie.Table<Purchase, number>;
 
   constructor() {
     super('FinanceDB');
-    this.version(1).stores({
-      transactions: '++id, amount, category, type, date',
+    this.version(2).stores({
+      purchases: '++id, productName, category, paymentMethod, amount, date'
     });
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const db = new FinanceDB();

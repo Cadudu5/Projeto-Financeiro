@@ -1,20 +1,36 @@
 import { create } from 'zustand';
 import { db } from './db';
-import { Transaction } from '../types/transactions';
-interface TransactionStore {
-  transactions: Transaction[];
-  addTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<void>;
-  fetchTransactions: () => Promise<void>;
+import { Purchase } from '../types/transactions';
+
+interface PurchaseStore {
+  purchases: Purchase[];
+  addPurchase: (purchase: Omit<Purchase, 'id' | 'date'>) => Promise<void>;
+  fetchPurchases: () => Promise<void>;
+  deletePurchase: (id: number) => Promise<void>;
 }
 
-export const useTransactionStore = create<TransactionStore>((set) => ({
-  transactions: [],
-  addTransaction: async (transaction) => {
-    await db.transactions.add(transaction);
-    set({ transactions: [...useTransactionStore.getState().transactions, transaction] });
+export const usePurchaseStore = create<PurchaseStore>((set) => ({
+  purchases: [],
+  
+  addPurchase: async (purchase) => {
+    const newPurchase = {
+      ...purchase,
+      date: new Date() // Adiciona a data atual automaticamente
+    };
+    await db.purchases.add(newPurchase);
+    set({ purchases: [...usePurchaseStore.getState().purchases, newPurchase] });
   },
-  fetchTransactions: async () => {
-    const transactions = await db.transactions.toArray();
-    set({ transactions });
+
+  fetchPurchases: async () => {
+    const purchases = await db.purchases
+      .orderBy('date') // Ordena por data (opcional)
+      .reverse() // Mais recentes primeiro
+      .toArray();
+    set({ purchases });
   },
+
+  deletePurchase: async (id) => {
+    await db.purchases.delete(id);
+    set({ purchases: usePurchaseStore.getState().purchases.filter(p => p.id !== id) });
+  }
 }));
