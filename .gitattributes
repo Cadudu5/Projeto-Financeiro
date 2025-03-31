@@ -1,0 +1,4 @@
+README.md eslint.config.mjs next-env.d.ts next.config.ts node_modules package-lock.json package.json postcss.config.mjs public src tsconfig.json text=auto
+*.js text eol=lf
+package-lock.json package.json tsconfig.json text eol=lf
+*.tsx text eol=lf
