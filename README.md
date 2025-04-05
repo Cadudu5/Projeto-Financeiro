@@ -29,3 +29,21 @@ controle-financeiro/
 ├── public/                   # Assets estáticos
 ├── next.config.js            # Config Next.js
 └── package.json
+
+## Estrutura das páginas
+```markdown
+app/
+├── compras/
+│   ├── page.tsx       # Lista de compras
+│   └── nova/
+│       └── page.tsx   # Formulário de nova compra
+├── orcamento/
+│   └── page.tsx       # Página de orçamento (criar depois)
+└── page.tsx           # Página inicial (dashboard)
+
+
+# Como adicionar novas rotas
+
+- Crie pasta da rota em app/
+- Adicione um novo item no array navItems no componente Navbar
+- Crie o arquivo page.tsx dentro da pasta
